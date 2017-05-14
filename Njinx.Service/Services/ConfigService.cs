@@ -73,9 +73,13 @@ namespace Njinx.Service.Services
             Mapper.Initialize(cfg =>
             {
                 cfg.CreateMap<UserProfileDto, UserProfile>()
-                    .ForMember(dest => dest.ApplicationUserId, opt => opt.MapFrom(src => src.AppUserId));
+                    .ForMember(dest => dest.ApplicationUserId, opt => opt.MapFrom(src => src.AppUserId))
+                    .ForMember(dest => dest.ApplicationUser, opt => opt.Ignore())
+                    .ForMember(dest => dest.ProfileImage, opt => opt.MapFrom(src => src.ProfileImageB64));
+                
                 cfg.CreateMap<UserProfile, UserProfileDto>()
-                    .ForMember(dest => dest.AppUserId, opt => opt.MapFrom(src => src.ApplicationUserId));
+                    .ForMember(dest => dest.AppUserId, opt => opt.MapFrom(src => src.ApplicationUserId))
+                    .ForMember(dest => dest.ProfileImageB64, opt => opt.MapFrom(src => src.ProfileImage));
 
             });
 

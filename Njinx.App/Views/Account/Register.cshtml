@@ -5,12 +5,21 @@
 
 <h2>@ViewBag.Title.</h2>
 
-@using (Html.BeginForm("Register", "Account", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+@using (Html.BeginForm("Register", "Account", FormMethod.Post, new { @class = "dropzone form-horizontal", role = "form", id = "profileForm", style = "margin: 0; border: 0" }))
 {
     @Html.AntiForgeryToken()
     <h4>Create a new account.</h4>
     <hr />
     @Html.ValidationSummary("", new { @class = "text-danger" })
+    
+    <div class="form-group">
+        @Html.Label("Photo", new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            <button type="button" id="browse" class="btn btn-default">Browse</button>
+            <div id="previews" class="dropzone-previews"></div>
+        </div>
+    </div>
+    
     <div class="form-group">
         @Html.LabelFor(m => m.Email, new { @class = "col-md-2 control-label" })
         <div class="col-md-10">
@@ -49,16 +58,44 @@
     </div>
     <div class="form-group">
         <div class="col-md-offset-2 col-md-10">
-            <input type="submit" class="btn btn-default" value="Register" />
+            <input type="submit" class="btn btn-primary" value="Register" />
         </div>
     </div>
 }
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
-<script type="text/javascript">
-    $(function () { // will trigger when the document is ready
-       $('.datepicker').datepicker(); //Initialise any date pickers
-    });
-</script>
+    <script type="text/javascript">
+        $(function () { // will trigger when the document is ready
+            $('.datepicker').datepicker(); //Initialise any date pickers
+        });
+        Dropzone.options.profileForm = { // The camelized version of the ID of the form element
+
+            // The configuration we've talked about above
+            dictDefaultMessage: '',
+            autoDiscover: false,
+            previewsContainer: "#previews",
+            acceptedFiles: "image/png",
+            autoProcessQueue: false,
+            uploadMultiple: false,
+            parallelUploads: 1,
+            maxFiles: 1,
+            clickable: "#browse",
+            // The setting up of the dropzone
+            init: function () {
+                var myDropzone = this;
+
+
+
+                // First change the button to actually tell Dropzone to process the queue.
+                this.element.querySelector("input[type=submit]").addEventListener("click", function (e) {
+                    // Make sure that the form isn't actually being sent.
+                    e.preventDefault();
+                    e.stopPropagation();
+                    myDropzone.processQueue();
+                });
+            }
+
+        }
+    </script>
 }

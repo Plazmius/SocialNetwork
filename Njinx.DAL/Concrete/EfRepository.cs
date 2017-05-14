@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Threading.Tasks;
 using Njinx.DAL.Abstract;
 
 namespace Njinx.DAL.Concrete
@@ -46,6 +47,34 @@ namespace Njinx.DAL.Concrete
                 return orderBy(query).ToList();
             }
             return query.ToList();
+        }
+
+        public virtual async Task<IEnumerable<TEntity>> GetAsync(
+            Expression<Func<TEntity, bool>> filter = null,
+            Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null,
+            string includeProperties = "")
+        {
+            return await Task.Run(() =>
+            {
+                IQueryable<TEntity> query = _dbSet;
+
+                if (filter != null)
+                {
+                    query = query.Where(filter);
+                }
+
+                foreach (var includeProperty in includeProperties.Split
+                    (new[] {','}, StringSplitOptions.RemoveEmptyEntries))
+                {
+                    query = query.Include(includeProperty);
+                }
+
+                if (orderBy != null)
+                {
+                    return orderBy(query).ToList();
+                }
+                return query.ToList();
+            });
         }
 
         public virtual TEntity GetById(object id)

@@ -62,6 +62,10 @@
     <Compile Include="Migrations\201705080942222_Initial.Designer.cs">
       <DependentUpon>201705080942222_Initial.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201705131248036_AddedProfileImage.cs" />
+    <Compile Include="Migrations\201705131248036_AddedProfileImage.Designer.cs">
+      <DependentUpon>201705131248036_AddedProfileImage.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -72,6 +76,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201705080942222_Initial.resx">
       <DependentUpon>201705080942222_Initial.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201705131248036_AddedProfileImage.resx">
+      <DependentUpon>201705131248036_AddedProfileImage.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

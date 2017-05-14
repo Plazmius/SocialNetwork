@@ -9,6 +9,7 @@ namespace Njinx.Service.Models
         public string Name { get; set; }
         public string Surname { get; set; }
         public DateTime BirthDate { get; set; }
-        public string AppUserId {get; set; }
+        public string AppUserId { get; set; }
+        public string ProfileImageB64 { get; set; }
     }
 }

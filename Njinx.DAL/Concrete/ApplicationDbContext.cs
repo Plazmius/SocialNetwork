@@ -16,6 +16,21 @@ namespace Njinx.DAL.Concrete
         {
         }
 
+        protected override void OnModelCreating(DbModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<UserProfile>()
+                .HasMany<UserProfile>(s => s.Followed)
+                .WithMany(c => c.Followers)
+                .Map(cs =>
+                {
+                    cs.MapLeftKey("User_Id");
+                    cs.MapRightKey("FollowedUser_Id");
+                    cs.ToTable("Follows");
+                });
+        }
+
         public static ApplicationDbContext Create()
         {
             return new ApplicationDbContext();

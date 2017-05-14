@@ -1,0 +1,21 @@
+﻿@model IEnumerable<Njinx.App.Models.ProfileViewModel>
+
+@{
+    ViewBag.Title = "Search";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Search results</h2>
+
+@foreach (var item in Model)
+{
+    <hr />
+    <div class="media">
+        <div class="pull-left" style="vertical-align: middle">
+            <img src="@String.Format("data:image/png;base64,{0}", item.ProfileImage)" class="media-object" style="width:200px">
+        </div>
+        <div class="media-body" style="vertical-align: middle">
+            <h4 class="media-heading" style="vertical-align: middle">@item.Name @item.Surname</h4>
+        </div>
+    </div>
+}

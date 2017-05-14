@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Drawing;
+using System.Drawing.Imaging;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -13,6 +16,7 @@ using Njinx.Core.Entities;
 using Njinx.Service.Models;
 using Njinx.Service.Services;
 using Njinx.Service.Services.IdentityServices;
+using Njinx.Service.Tools;
 
 namespace Njinx.App.Controllers
 {
@@ -157,12 +161,28 @@ namespace Njinx.App.Controllers
             {
                 var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
                 var result = await UserManager.CreateAsync(user, model.Password);
+                byte[] profilePicture; 
+                if (Request.Files.Count > 0)
+                {
+                    using (var memoryStream = new MemoryStream())
+                    {
+                        Request.Files[0].InputStream.CopyTo(memoryStream);
+                        profilePicture = memoryStream.ToArray();
+                    }
+                }
+                else
+                {
+                    profilePicture = Image
+                    .FromFile(Server.MapPath("~/App_Data/Images/default_profile_pic.png"))
+                    .ToBytes(ImageFormat.Png);
+                }
                 var userProfile = new UserProfileDto
                 {
                     AppUserId = user.Id,
                     BirthDate = model.BirthDate.Date,
                     Name = model.Name,
-                    Surname = model.Surname
+                    Surname = model.Surname,
+                    ProfileImageB64 = Convert.ToBase64String(profilePicture)
                 };
                 new ProfileManager().Add(userProfile);
                 if (result.Succeeded)
